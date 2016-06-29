@@ -47,24 +47,29 @@ public class ComposeFragment extends DialogFragment implements View.OnClickListe
         return inflater.inflate(R.layout.fragment_compose, container);
     }
 
+    User user;
+    TwitterClient client;
     @Override
     public void onClick(View v) {
-        TwitterClient client = TwitterApplication.getRestClient();
+        client = TwitterApplication.getRestClient();
+
         client.getUserInfo(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                tweet.setUser(User.fromJSON(response));
+                user = User.fromJSON(response);
+                // Return input text to activity
+                // Log.d("DEBUG", editText.getText().toString());
+                ComposeFragmentListener activity = (ComposeFragmentListener) getActivity();
+
+                //activity.onReturnValue(editText.getText().toString());
+                tweet.setUser(user);
+                tweet.setBody(editText.getText().toString());
+                tweet.setUid(0);
+                tweet.setCreatedAt("Now");
+                activity.onReturnValue(tweet);
+                ComposeFragment.this.dismiss();
             }
         });
-        // Return input text to activity
-        // Log.d("DEBUG", editText.getText().toString());
-        ComposeFragmentListener activity = (ComposeFragmentListener) getActivity();
-        //activity.onReturnValue(editText.getText().toString());
-        tweet.setBody(editText.getText().toString());
-        tweet.setUid(0);
-        tweet.setCreatedAt("Now");
-        activity.onReturnValue(tweet);
-        this.dismiss();
     }
 
     @Override

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -23,17 +22,21 @@ import cz.msebera.android.httpclient.Header;
 
 public class TimelineActivity extends AppCompatActivity implements ComposeFragment.ComposeFragmentListener {
 
+    private SmartFragmentStatePagerAdapter adapterViewPager;
     public TwitterClient client;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
+        adapterViewPager =  new TweetsPagerAdapter(getSupportFragmentManager());
         // Get the viewpager
         ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
         // Set the viewpager adapter for the pager
-        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+      //  vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        vpPager.setAdapter(adapterViewPager);
         // Find the pager sliding tabstrip
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         // Attach the pager tabstrip to the viewpager
@@ -72,6 +75,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             }
         });
 
+        HomeTimelineFragment fragmentHomeTweets =
+                (HomeTimelineFragment) adapterViewPager.getRegisteredFragment(0);
+        fragmentHomeTweets.appendTweet(tweet);
     }
 
 
@@ -126,8 +132,17 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         startActivity(i);
     }
 
+//    public void onViewFriendProfile(View view) {
+// //       Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
+//        Intent i = new Intent(TimelineActivity.this, FriendProfileActivity.class);
+//        TextView tvScreenName = (TextView) findViewById(R.id.tvUserName);
+//        String screen_name = tvScreenName.getText().toString();
+//        i.putExtra("screen_name", screen_name);
+//        startActivity(i);
+//    }
+
     // Return the order of the fragments in the ViewPager
-    public class TweetsPagerAdapter extends FragmentPagerAdapter {
+    public class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {
 
         private String tabTitles[] = {"Home", "Mentions"};
 

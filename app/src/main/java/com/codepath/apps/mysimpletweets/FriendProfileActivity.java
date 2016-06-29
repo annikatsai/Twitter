@@ -1,8 +1,8 @@
 package com.codepath.apps.mysimpletweets;
 
-import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,22 +15,20 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-public class ProfileActivity extends AppCompatActivity {
+public class FriendProfileActivity extends AppCompatActivity {
 
     TwitterClient client;
     User user;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-
-
+        String screenName = getIntent().getStringExtra("screen_name");
         client = TwitterApplication.getRestClient();
         // Get the account info
-        client.getUserInfo(new JsonHttpResponseHandler() {
+        client.viewProfile(screenName, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 user = User.fromJSON(response);
@@ -41,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         // Get the screen name from activity that launches this
-        String screenName = getIntent().getStringExtra("screen_name");
+
         if (savedInstanceState == null) {
             // Create the user timeline fragment
             UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
