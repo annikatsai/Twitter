@@ -46,6 +46,7 @@ public class UserTimelineFragment extends TweetsListFragment {
                 // DESERIALIZE JSON
                 // CREATE MODELS AND ADD THEM TO THE ADAPTER
                 // LOAD THE MODEL DATA INTO LISTVIEW
+
                 addAll(Tweet.fromJSONArray(json));
             }
 

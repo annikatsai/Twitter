@@ -13,8 +13,17 @@ import android.view.MenuItem;
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
+import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
-public class TimelineActivity extends AppCompatActivity {
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
+
+public class TimelineActivity extends AppCompatActivity implements ComposeFragment.ComposeFragmentListener {
+
+    public TwitterClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +38,75 @@ public class TimelineActivity extends AppCompatActivity {
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         // Attach the pager tabstrip to the viewpager
         tabStrip.setViewPager(vpPager);
+
+        client = TwitterApplication.getRestClient();
+
     }
+
+    private final int REQUEST_CODE = 20;
+
+    public void onComposeView(MenuItem mi) {
+//        Intent i = new Intent(this, ComposeActivity.class);
+//        startActivityForResult(i, REQUEST_CODE);
+        showEditDialog();
+    }
+
+    private void showEditDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        ComposeFragment composeFragment = ComposeFragment.newInstance("");
+        composeFragment.show(fm, "fragment_edit_name");
+    }
+
+    @Override
+    public void onReturnValue(Tweet tweet) {
+        //Toast.makeText(this, inputText, Toast.LENGTH_SHORT).show();
+        client.postTweet(tweet.getBody(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
+
+    }
+
+
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+//            String post = data.getExtras().getString("post");
+//            Toast.makeText(this, post, Toast.LENGTH_SHORT).show();
+//            client.postTweet(post, new JsonHttpResponseHandler(){
+//                @Override
+//                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+//                    super.onSuccess(statusCode, headers, response);
+//                }
+//                @Override
+//                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                    super.onFailure(statusCode, headers, throwable, errorResponse);
+//                }
+//            });
+//        }
+//    }
+
+//    private void post(String body) {
+//        client.postTweet(body, new JsonHttpResponseHandler() {
+//            @Override
+//                public void onSuccess(int statusCode, PreferenceActivity.Header[] headers, JSONArray response) {
+//                    super.onSuccess(statusCode, headers, response);
+//                }
+//            @Override
+//                public void onFailure(int statusCode, PreferenceActivity.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                    super.onFailure(statusCode, headers, throwable, errorResponse);
+//                }
+//
+//        });
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
