@@ -2,6 +2,8 @@ package com.codepath.apps.mysimpletweets.models;
 
 import android.text.format.DateUtils;
 
+import com.codepath.apps.mysimpletweets.TimeFormatter;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,7 +63,8 @@ public class Tweet {
         try {
             tweet.body = jsonObject.getString("text");
             tweet.uid = jsonObject.getLong("id");
-            tweet.createdAt = getRelativeTimeAgo(jsonObject.getString("created_at"));
+            //tweet.createdAt = getRelativeTimeAgo(jsonObject.getString("created_at"));
+            tweet.createdAt = TimeFormatter.getTimeDifference(jsonObject.get("created_at").toString());
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
         } catch (JSONException e) {
             e.printStackTrace();

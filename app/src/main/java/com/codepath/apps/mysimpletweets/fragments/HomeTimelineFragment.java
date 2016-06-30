@@ -53,4 +53,28 @@ public class HomeTimelineFragment extends TweetsListFragment {
         aTweets.notifyDataSetChanged();
         lvTweets.setSelection(0);
     }
+
+    public void fetchTimelineAsync(int page) {
+        // Send the network request to fetch the updated data
+        // `client` here is an instance of Android Async HTTP
+        TwitterClient client = TwitterApplication.getRestClient();
+
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
+            // Success
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+                aTweets.clear();
+                aTweets.addAll(Tweet.fromJSONArray(json));
+                aTweets.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
+            }
+
+            // Failure
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+            }
+        });
+
+    }
 }

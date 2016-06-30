@@ -1,6 +1,5 @@
 package com.codepath.apps.mysimpletweets.fragments;
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -11,11 +10,12 @@ import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MentionsTimelineFragment extends TweetsListFragment {
+public class SearchTweetsFragment extends TweetsListFragment {
 
     private TwitterClient client;
 
@@ -27,39 +27,30 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         populateTimeline();
     }
 
+    public static SearchTweetsFragment newInstance(String query) {
+        SearchTweetsFragment searchFragment = new SearchTweetsFragment();
+        Bundle args = new Bundle();
+        args.putString("q", query);
+        searchFragment.setArguments(args);
+        return searchFragment;
+    }
+
     // Send API request to get timeline json
     // Fill the listview by creating the tweet objects from the json
     private void populateTimeline() {
-        client.getMentionsTimeline(new JsonHttpResponseHandler() {
+        String query = getArguments().getString("q");
+        client.searchTweets(query, new JsonHttpResponseHandler() {
             // Success
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 Log.d("DEBUG", json.toString());
-                // DESERIALIZE JSON
-                // CREATE MODELS AND ADD THEM TO THE ADAPTER
-                // LOAD THE MODEL DATA INTO LISTVIEW
-                addAll(Tweet.fromJSONArray(json));
-            }
-
-            // Failure
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
-            }
-        });
-    }
-    public void fetchTimelineAsync(int page) {
-
-        TwitterClient client = TwitterApplication.getRestClient();
-
-        client.getMentionsTimeline(new JsonHttpResponseHandler() {
-            // Success
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                aTweets.clear();
-                aTweets.addAll(Tweet.fromJSONArray(json));
-                aTweets.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
+                JSONArray tweetResults = null;
+                try {
+                    tweetResults = json.getJSONArray("statuses");
+                    addAll(Tweet.fromJSON(json).fromJSONArray(tweetResults));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             // Failure

@@ -79,6 +79,8 @@ public class ComposeFragment extends DialogFragment implements View.OnClickListe
 
         // Get field from view
         editText = (EditText) view.findViewById(R.id.etPost);
+        //tvCharacterCount = (TextView) view.findViewById(R.id.tvCharacterCount);
+
 
         btnTweet = (Button) view.findViewById(R.id.btnTweet);
         btnTweet.setOnClickListener(this);
@@ -91,8 +93,6 @@ public class ComposeFragment extends DialogFragment implements View.OnClickListe
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
-
-
 
 }
 
