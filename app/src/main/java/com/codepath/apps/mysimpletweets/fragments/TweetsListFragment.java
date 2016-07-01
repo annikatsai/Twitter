@@ -49,7 +49,7 @@ public class TweetsListFragment extends Fragment {
         lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getContext(), DetailActivity.class);
+                Intent i = new Intent(getActivity(), DetailActivity.class);
                 i.putExtra("tweet", Parcels.wrap(tweets.get(position)));
                 startActivity(i);
             }

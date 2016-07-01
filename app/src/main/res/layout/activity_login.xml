@@ -44,4 +44,13 @@
         android:layout_above="@+id/button"
         android:layout_centerHorizontal="true" />
 
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:id="@+id/imageView"
+        android:src="@drawable/ic_twitter_white"
+        android:layout_marginTop="44dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

@@ -80,7 +80,6 @@ public class TwitterClient extends OAuthBaseClient {
 		getClient().get(apiURL, params, handler);
 	}
 
-
 	// Compose Tweet
 	public void postTweet(String post, AsyncHttpResponseHandler handler) {
 		String apiURL = getApiUrl("statuses/update.json");
@@ -96,12 +95,33 @@ public class TwitterClient extends OAuthBaseClient {
 		getClient().get(apiURL, params, handler);
 	}
 
-//	public void retweetTweet(int id, AsyncHttpResponseHandler handler) {
-//		String apiURL = getApiUrl("statuses/retweet/:id.json");
-//		RequestParams params = new RequestParams();
-//		params.put("id", id);
-//		getClient().get(apiURL, params, handler);
-//	}
+	public void retweetTweet(long id, AsyncHttpResponseHandler handler) {
+		String apiURL = getApiUrl("statuses/retweet/" + id + ".json");
+		RequestParams params = new RequestParams();
+		params.put("id", id);
+		getClient().post(apiURL, params, handler);
+	}
+
+	public void unretweetTweet(long id, AsyncHttpResponseHandler handler) {
+		String apiURL = getApiUrl("statuses/unretweet/" + id + ".json");
+		RequestParams params = new RequestParams();
+		params.put("id", id);
+		getClient().post(apiURL, params, handler);
+	}
+
+	public void favoriteTweet(long id, AsyncHttpResponseHandler handler) {
+		String apiURL = getApiUrl("favorites/create.json");
+		RequestParams params = new RequestParams();
+		params.put("id", id);
+		getClient().post(apiURL, params, handler);
+	}
+
+	public void unfavoriteTweet(long id, AsyncHttpResponseHandler handler) {
+		String apiURL = getApiUrl("favorites/destroy.json");
+		RequestParams params = new RequestParams();
+		params.put("id", id);
+		getClient().post(apiURL, params, handler);
+	}
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
 	 * 	  i.e getApiUrl("statuses/home_timeline.json");

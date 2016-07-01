@@ -28,7 +28,6 @@ public class ComposeFragment extends DialogFragment implements View.OnClickListe
 
     private EditText editText;
     private Button btnTweet;
-    private Button btnExit;
     private TextView tvCharCount;
     static int MAX_COUNT = 140;
 
@@ -79,6 +78,8 @@ public class ComposeFragment extends DialogFragment implements View.OnClickListe
         });
     }
 
+
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -108,12 +109,9 @@ public class ComposeFragment extends DialogFragment implements View.OnClickListe
                 int count = MAX_COUNT - s.length();
                 tvCharCount.setText(Integer.toString(count));
                 tvCharCount.setTextColor(Color.DKGRAY);
-//                if(count < 10) {
-//                    tvCharCount.setTextColor(Color.YELLOW);
-//                }
-//                if(count < 0) {
-//                    tvCharCount.setTextColor(Color.RED);
-//                }
+                if (count < 0) {
+                    tvCharCount.setTextColor(Color.RED);
+                }
             }
         });
 

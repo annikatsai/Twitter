@@ -25,9 +25,21 @@ public class Tweet {
     public String createdAt;
     public String detailTimeStamp;
 
+    public Boolean getFavorited() {
+        return isFavorited;
+    }
+
+    public Boolean getRetweeted() {
+        return isRetweeted;
+    }
+
+    public Boolean isFavorited;
+    public Boolean isRetweeted;
+
     public Tweet() {}
     // Deserialize the JSON and build tweet objects
     // Tweet.fromJSON("{...}") => <Tweet>
+
 
     public String getBody() {
         return body;
@@ -72,6 +84,8 @@ public class Tweet {
             tweet.createdAt = TimeFormatter.getTimeDifference(jsonObject.get("created_at").toString());
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
             tweet.detailTimeStamp = TimeFormatter.getTimeStamp(jsonObject.get("created_at").toString());
+            tweet.isFavorited = jsonObject.getBoolean("favorited");
+            tweet.isRetweeted = jsonObject.getBoolean("retweeted");
         } catch (JSONException e) {
             e.printStackTrace();
         }
