@@ -7,6 +7,7 @@ import com.codepath.apps.mysimpletweets.TimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,20 +15,25 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 // Parse the JSON + Store the data, encapsulate state logic or display  logic
+@Parcel
 public class Tweet {
 
     // list out the attributes
-    private String body;
-    private long uid;   // unique id for the tweet
-    private User user;  // store embedded user object
-    private String createdAt;
+    public String body;
+    public long uid;   // unique id for the tweet
+    public User user;  // store embedded user object
+    public String createdAt;
+    public String detailTimeStamp;
 
+    public Tweet() {}
     // Deserialize the JSON and build tweet objects
     // Tweet.fromJSON("{...}") => <Tweet>
 
     public String getBody() {
         return body;
     }
+
+    public String getDetailTimeStamp() {return detailTimeStamp;}
 
     public long getUid() {
         return uid;
@@ -63,9 +69,9 @@ public class Tweet {
         try {
             tweet.body = jsonObject.getString("text");
             tweet.uid = jsonObject.getLong("id");
-            //tweet.createdAt = getRelativeTimeAgo(jsonObject.getString("created_at"));
             tweet.createdAt = TimeFormatter.getTimeDifference(jsonObject.get("created_at").toString());
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+            tweet.detailTimeStamp = TimeFormatter.getTimeStamp(jsonObject.get("created_at").toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

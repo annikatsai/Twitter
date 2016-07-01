@@ -35,7 +35,9 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         }
         // 3. Find the subviews to fill with data in the template
         ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
+//        final TextView tvUserName = (TextView) convertView.findViewById(R.id.tvName);
         final TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
+        TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
         TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
         TextView tvTimestamp = (TextView) convertView.findViewById(R.id.tvTimestamp);
         ivProfileImage.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +49,8 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             }
         });
         // 4. Populate data into subviews
-        tvUserName.setText(tweet.getUser().getScreenName());
+        tvName.setText(tweet.getUser().getName());
+        tvUserName.setText("@" + tweet.getUser().getScreenName());
         tvBody.setText(tweet.getBody());
         tvTimestamp.setText(tweet.getCreatedAt());
         ivProfileImage.setImageResource(android.R.color.transparent); // clear out the old image for a recycled view

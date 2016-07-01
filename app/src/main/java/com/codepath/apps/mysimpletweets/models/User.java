@@ -2,17 +2,21 @@ package com.codepath.apps.mysimpletweets.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
+@Parcel
 public class User {
 
     // list the attributes
-    private String name;
-    private long uid;
-    private String screenName;
-    private String profileImageUrl;
-    private String tagline;
-    private int followersCount;
-    private int followingsCount;
+    public String name;
+    public long uid;
+    public String screenName;
+    public String profileImageUrl;
+    public String tagline;
+    public int followersCount;
+    public int followingsCount;
+
+    public User () {}
 
     public String getName() {
         return name;
