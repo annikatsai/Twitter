@@ -14,11 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -37,7 +40,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-//        getSupportActionBar().setTitle("");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -61,19 +63,24 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
     }
 
-
-    private final int REQUEST_CODE = 20;
-
     public void onComposeView(MenuItem mi) {
-//        Intent i = new Intent(this, ComposeActivity.class);
-//        startActivityForResult(i, REQUEST_CODE);
         showEditDialog();
     }
 
+    User user;
     private void showEditDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        ComposeFragment composeFragment = ComposeFragment.newInstance("");
-        composeFragment.show(fm, "fragment_edit_name");
+        final FragmentManager fm = getSupportFragmentManager();
+
+        TwitterClient twitterClient = TwitterApplication.getRestClient();
+        twitterClient.getUserInfo(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                user = User.fromJSON(response);
+                String profileImageUrl = user.getProfileImageUrl();
+                ComposeFragment composeFragment = ComposeFragment.newInstance("", profileImageUrl);
+                composeFragment.show(fm, "fragment_compose");
+            }
+        });
     }
 
     @Override
@@ -96,46 +103,20 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         fragmentHomeTweets.appendTweet(tweet);
     }
 
-
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-//            String post = data.getExtras().getString("post");
-//            Toast.makeText(this, post, Toast.LENGTH_SHORT).show();
-//            client.postTweet(post, new JsonHttpResponseHandler(){
-//                @Override
-//                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                    super.onSuccess(statusCode, headers, response);
-//                }
-//                @Override
-//                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                    super.onFailure(statusCode, headers, throwable, errorResponse);
-//                }
-//            });
-//        }
-//    }
-
-//    private void post(String body) {
-//        client.postTweet(body, new JsonHttpResponseHandler() {
-//            @Override
-//                public void onSuccess(int statusCode, PreferenceActivity.Header[] headers, JSONArray response) {
-//                    super.onSuccess(statusCode, headers, response);
-//                }
-//            @Override
-//                public void onFailure(int statusCode, PreferenceActivity.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                    super.onFailure(statusCode, headers, throwable, errorResponse);
-//                }
-//
-//        });
-//    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_timeline, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        int searchTextID = android.support.v7.appcompat.R.id.search_src_text;
+        TextView textView = (TextView) searchView.findViewById(searchTextID);
+        textView.setTextColor(Color.BLACK);
+        ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text))
+                .setHintTextColor(Color.BLACK);
+
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -171,15 +152,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         Intent i = new Intent(this, ProfileActivity.class);
         startActivity(i);
     }
-
-//    public void onViewFriendProfile(View view) {
-// //       Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
-//        Intent i = new Intent(TimelineActivity.this, FriendProfileActivity.class);
-//        TextView tvScreenName = (TextView) findViewById(R.id.tvUserName);
-//        String screen_name = tvScreenName.getText().toString();
-//        i.putExtra("screen_name", screen_name);
-//        startActivity(i);
-//    }
 
     // Return the order of the fragments in the ViewPager
     public class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {

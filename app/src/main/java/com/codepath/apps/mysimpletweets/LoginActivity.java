@@ -13,6 +13,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		getSupportActionBar().hide();
 	}
 
 	// Inflate the menu; this adds items to the action bar if it is present.

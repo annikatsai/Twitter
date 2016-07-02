@@ -1,5 +1,7 @@
 package com.codepath.apps.mysimpletweets;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +38,10 @@ public class ProfileActivity extends AppCompatActivity {
                 user = User.fromJSON(response);
                 // My current user account's information
                 getSupportActionBar().setTitle("@" + user.getScreenName());
+                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+                getSupportActionBar().setLogo(R.drawable.ic_twitter);
+                getSupportActionBar().setDisplayUseLogoEnabled(true);
                 populateProfileHeader(user);
             }
         });

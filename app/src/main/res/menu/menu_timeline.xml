@@ -26,5 +26,10 @@
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />
 
+    <item
+        android:id="@+id/miMessage"
+        android:title="Message"
+        android:icon="@drawable/ic_message"
+        app:showAsAction="ifRoom"/>
 
 </menu>

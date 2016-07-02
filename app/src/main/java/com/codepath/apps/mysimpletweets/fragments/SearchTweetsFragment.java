@@ -24,12 +24,14 @@ public class SearchTweetsFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
         // Get the client
         client = TwitterApplication.getRestClient();    // singleton client
-        populateTimeline();
+        populateTimeline(args.getString("q"));
+
     }
 
+    static Bundle args;
     public static SearchTweetsFragment newInstance(String query) {
         SearchTweetsFragment searchFragment = new SearchTweetsFragment();
-        Bundle args = new Bundle();
+        args = new Bundle();
         args.putString("q", query);
         searchFragment.setArguments(args);
         return searchFragment;
@@ -37,8 +39,8 @@ public class SearchTweetsFragment extends TweetsListFragment {
 
     // Send API request to get timeline json
     // Fill the listview by creating the tweet objects from the json
-    private void populateTimeline() {
-        String query = getArguments().getString("q");
+    public void populateTimeline(String query) {
+        //String query = getArguments().getString("q");
         client.searchTweets(query, new JsonHttpResponseHandler() {
             // Success
             @Override
@@ -46,8 +48,10 @@ public class SearchTweetsFragment extends TweetsListFragment {
                 Log.d("DEBUG", json.toString());
                 JSONArray tweetResults = null;
                 try {
+                    aTweets.clear();
                     tweetResults = json.getJSONArray("statuses");
-                    addAll(Tweet.fromJSON(json).fromJSONArray(tweetResults));
+                    aTweets.addAll(Tweet.fromJSON(json).fromJSONArray(tweetResults));
+                    aTweets.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

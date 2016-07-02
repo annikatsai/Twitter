@@ -93,5 +93,15 @@
         android:layout_marginLeft="53dp"
         android:layout_marginStart="53dp" />
 
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/imageView2"
+        android:src="@drawable/ic_message_grey"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_toRightOf="@+id/ivRetweet"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="51dp" />
+
 
 </RelativeLayout>

@@ -51,14 +51,14 @@
         android:layout_alignTop="@+id/btnTweet"
         android:layout_toLeftOf="@+id/btnTweet" />
 
-    <!--<ImageButton-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:src="@drawable/exit_svg"-->
-        <!--android:id="@+id/btnExit"-->
-        <!--android:layout_alignTop="@+id/ivProfileImage"-->
-        <!--android:layout_alignLeft="@+id/etPost"-->
-        <!--android:layout_alignStart="@+id/etPost"-->
-        <!--android:onClick="onExitClick"/>-->
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/ivExit"
+        android:src="@drawable/ic_exit"
+        android:layout_alignTop="@+id/ivProfileImage"
+        android:layout_alignLeft="@+id/etPost"
+        android:layout_alignStart="@+id/etPost" />
+
 
 </RelativeLayout>

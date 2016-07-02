@@ -12,11 +12,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -26,6 +28,8 @@ public class ComposeFragment extends DialogFragment implements View.OnClickListe
 
     Tweet tweet;
 
+    private ImageView ivProfileImage;
+    private ImageView ivExit;
     private EditText editText;
     private Button btnTweet;
     private TextView tvCharCount;
@@ -38,11 +42,12 @@ public class ComposeFragment extends DialogFragment implements View.OnClickListe
     public ComposeFragment() {
     }
 
-
-    public static ComposeFragment newInstance(String title) {
+    static Bundle args;
+    public static ComposeFragment newInstance(String title, String profileImageUrl) {
         ComposeFragment frag = new ComposeFragment();
-        Bundle args = new Bundle();
+        args = new Bundle();
         args.putString("title", title);
+        args.putString("profileImageUrl", profileImageUrl);
         frag.setArguments(args);
         return frag;
     }
@@ -86,11 +91,22 @@ public class ComposeFragment extends DialogFragment implements View.OnClickListe
         tweet = new Tweet();
 
         // Get field from view
+        ivExit = (ImageView) view.findViewById(R.id.ivExit);
+        ivExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ComposeFragment.this.dismiss();
+            }
+        });
         editText = (EditText) view.findViewById(R.id.etPost);
-        //tvCharacterCount = (TextView) view.findViewById(R.id.tvCharacterCount);
+        ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage);
+        ivProfileImage.setImageResource(android.R.color.transparent); // clear out the old image for a recycled view
+        Picasso.with(getContext())
+                .load(args.getString("profileImageUrl"))
+                .into(ivProfileImage);
 
         //btnExit = (Button) view.findViewById(R.id.btnExit);
-        tvCharCount = (TextView) view. findViewById(R.id.tvCharCount);
+        tvCharCount = (TextView) view.findViewById(R.id.tvCharCount);
         btnTweet = (Button) view.findViewById(R.id.btnTweet);
         btnTweet.setOnClickListener(this);
 
